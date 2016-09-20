@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>点击后加载</title>
+  <style>
+  ol{
+    overflow: hidden;
+  }
+  ol>li{
+    float: left;
+  }
+  </style>
+</head>
+<body>
+
+  <button name=loadMore data-page=1>加载</button>
+
+  <script src="//kejian.jirengu.com/static/js/jquery-1.11.1.min.js"></script>
+  <script>
+$(function(){
+  $button = $('button[name=loadMore]')
+  $button.on('click', function(){
+    var button = this
+    var page = $(button).attr('data-page')
+    page = parseInt(page,10)
+    var url = 'page-'+ page + '.json'
+    $.get(url).then(function(response){
+      if(response && response.length > 0){
+        var $ol = $('<ol/>')
+        var $li
+        for(var i =0; i<response.length; i++){
+          $li = $('<li><img></li>')
+          $li.find('img').attr('src', response[i].url)
+          $ol.append($li)
+        }
+        $(button).before($ol)
+        $(button).attr('data-page', page + 1)
+      }else{
+        alert('没啦')
+      }
+    }, function(){
+        alert('没啦')
+    })
+  })
+})
+  </script>
+</body>
+</html>
